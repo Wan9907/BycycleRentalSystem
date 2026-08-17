@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bycycle Rental System", "Bycycle Rental System.vcxproj", "{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Debug|x64.ActiveCfg = Debug|x64
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Debug|x64.Build.0 = Debug|x64
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Debug|x86.ActiveCfg = Debug|Win32
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Debug|x86.Build.0 = Debug|Win32
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Release|x64.ActiveCfg = Release|x64
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Release|x64.Build.0 = Release|x64
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Release|x86.ActiveCfg = Release|Win32
+		{50EB90FA-1D84-45EB-AB06-F1FD3C0B0EC8}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20ED759B-EB72-4340-8DE6-2015E43E122F}
+	EndGlobalSection
+EndGlobal
