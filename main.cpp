@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+
+#include "Bicycle.h"
 #include "Member.h"
 using namespace std;
 
@@ -9,7 +11,15 @@ int main() {
     int attempts = 3;
     bool loginSuccessful = false;
     int option;
+
     vector<Member> members;
+
+    vector<Bicycle> fleet = {
+        {101, "City Bike", 5.00, true},
+        {102, "Mountain Bike", 8.50, true},
+        {103, "Electric Bike", 15.00, true},
+        {104, "Tandem Bike", 12.00, true}
+    };
 
     cout << "======================================" << endl;
     cout << "//                                  //" << endl;
@@ -59,6 +69,7 @@ int main() {
 
             case 2:
                 cout << "Bicycle Rental selected." << endl;
+                    bikeRentalMenu(fleet);
                 break;
 
             case 3:
