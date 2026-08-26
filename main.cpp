@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 
-#include "Bicycle.h"
-#include "Member.h"
+#include "header/Bicycle.h"
+#include "header/member.h"
 using namespace std;
 
 int main() {

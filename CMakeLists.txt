@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(BycycleRentalSystem
         main.cpp
-        member.cpp
-        member.h
-        Bicycle.h
-        Bicycle.cpp
+        src/member.cpp
+        header/member.h
+        header/Bicycle.h
+        src/Bicycle.cpp
 )
