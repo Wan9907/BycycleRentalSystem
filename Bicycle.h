@@ -1,12 +1,3 @@
-//
-// Created by User on 8/25/2026.
-//
-
-#ifndef BYCYCLERENTALSYSTEM_BICYCLE_H
-#define BYCYCLERENTALSYSTEM_BICYCLE_H
-
-#endif //BYCYCLERENTALSYSTEM_BICYCLE_H
-
 #ifndef BICYCLE_H
 #define BICYCLE_H
 
@@ -18,10 +9,13 @@ struct Bicycle {
     std::string type;
     double hourlyRate;
     bool isAvailable;
+    std::string rentedBy; // Store user/member name or ID
 };
 
-// Function declarations
 void displayAvailableBikes(const std::vector<Bicycle>& fleet);
 void bikeRentalMenu(std::vector<Bicycle>& fleet);
+void saveBookingToFile(int bikeId, const std::string& bikeType, int hours, double totalCost, const std::string& userName);
+void saveFleetToFile(const std::vector<Bicycle>& fleet);
+void loadFleetFromFile(std::vector<Bicycle>& fleet);
 
 #endif

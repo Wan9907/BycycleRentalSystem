@@ -13,13 +13,9 @@ int main() {
     int option;
 
     vector<Member> members;
+    vector<Bicycle> fleet;
 
-    vector<Bicycle> fleet = {
-        {101, "City Bike", 5.00, true},
-        {102, "Mountain Bike", 8.50, true},
-        {103, "Electric Bike", 15.00, true},
-        {104, "Tandem Bike", 12.00, true}
-    };
+    loadFleetFromFile(fleet);
 
     cout << "======================================" << endl;
     cout << "//                                  //" << endl;
