@@ -1,17 +1,20 @@
-//
-// Created by User on 8/25/2026.
-//
 #include <iostream>
 #include <iomanip>
+#include <fstream>  // Fixed: Added for std::ifstream and std::ofstream
+#include <sstream>  // Fixed: Added for std::stringstream
+#include <ctime>    // Fixed: Added for timestamp calculations
 #include "../header/Bicycle.h"
+#include <filesystem> // Include filesystem header at top of src/Bicycle.cpp
 
 using namespace std;
 
-// Save state of all bikes to data/bikes.txt
-void saveFleetToFile(const vector<Bicycle>& fleet) {
-    ofstream outFile("data/bikes.txt");
+void saveFleetToFile(const std::vector<Bicycle>& fleet) {
+    // Automatically create the data folder if it does not exist
+    std::filesystem::create_directories("data");
+
+    std::ofstream outFile("data/bikes.txt");
     if (!outFile) {
-        cerr << "Error: Could not save fleet state!" << endl;
+        std::cerr << "Error: Could not save fleet state!" << std::endl;
         return;
     }
 
