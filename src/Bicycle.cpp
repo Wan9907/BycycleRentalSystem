@@ -7,6 +7,87 @@
 
 using namespace std;
 
+// Save state of all bikes to data/bikes.txt
+void saveFleetToFile(const vector<Bicycle>& fleet) {
+    ofstream outFile("data/bikes.txt");
+    if (!outFile) {
+        cerr << "Error: Could not save fleet state!" << endl;
+        return;
+    }
+
+    for (const auto& bike : fleet) {
+        outFile << bike.id << "|"
+                << bike.type << "|"
+                << bike.hourlyRate << "|"
+                << bike.isAvailable << "|"
+                << (bike.rentedBy.empty() ? "None" : bike.rentedBy) << "\n";
+    }
+    outFile.close();
+}
+
+// Log rental transaction to data/bookings.txt
+void saveBookingToFile(int bikeId, const string& bikeType, int hours, double totalCost) {
+    ofstream outFile("data/bookings.txt", ios::app);
+    if (!outFile) return;
+
+    time_t now = time(0);
+    char timeBuffer[80];
+    struct tm timeInfo;
+#if defined(_WIN32) || defined(_WIN64)
+    localtime_s(&timeInfo, &now);
+#else
+    localtime_r(&now, &timeInfo);
+#endif
+    strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeInfo);
+
+    outFile << "=== BOOKING RECORD ===" << endl;
+    outFile << "Timestamp   : " << timeBuffer << endl;
+    outFile << "Bike ID     : " << bikeId << endl;
+    outFile << "Bike Type   : " << bikeType << endl;
+    outFile << "Duration    : " << hours << " hour(s)" << endl;
+    outFile << "Total Cost  : $" << fixed << setprecision(2) << totalCost << endl;
+    outFile << "----------------------" << endl << endl;
+    outFile.close();
+}
+
+void loadFleetFromFile(std::vector<Bicycle>& fleet) {
+    std::ifstream inFile("data/bikes.txt");
+    if (!inFile) {
+        // Fallback default fleet if data/bikes.txt does not exist yet
+        fleet = {
+            {101, "City Bike", 5.00, true, "None"},
+            {102, "Mountain Bike", 8.50, true, "None"},
+            {103, "Electric Bike", 15.00, true, "None"},
+            {104, "Tandem Bike", 12.00, true, "None"}
+        };
+        // Removed saveFleetToFile(fleet) here so it won't throw an error if data/ folder is missing on first launch
+        return;
+    }
+
+    fleet.clear();
+    std::string line;
+    while (std::getline(inFile, line)) {
+        if (line.empty()) continue;
+        std::stringstream ss(line);
+        std::string idStr, type, rateStr, availStr, rentedBy;
+
+        std::getline(ss, idStr, '|');
+        std::getline(ss, type, '|');
+        std::getline(ss, rateStr, '|');
+        std::getline(ss, availStr, '|');
+        std::getline(ss, rentedBy, '|');
+
+        Bicycle bike;
+        bike.id = std::stoi(idStr);
+        bike.type = type;
+        bike.hourlyRate = std::stod(rateStr);
+        bike.isAvailable = (availStr == "1");
+        bike.rentedBy = rentedBy;
+        fleet.push_back(bike);
+    }
+    inFile.close();
+}
+
 void displayAvailableBikes(const vector<Bicycle>& fleet) {
     cout << "\n--- Available Bicycles ---" << endl;
     cout << left << setw(8) << "ID" << setw(18) << "Type" << setw(12) << "Rate/Hour" << "Status" << endl;
