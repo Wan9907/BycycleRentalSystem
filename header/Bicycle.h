@@ -14,7 +14,6 @@ struct Bicycle {
 void saveFleetToFile(const vector<Bicycle>& fleet);
 void loadFleetFromFile(vector<Bicycle>& fleet);
 void saveBookingToFile(int bikeId, const string& bikeType, int hours, double totalCost);
-
 void displayAvailableBikes(const vector<Bicycle>& fleet);
 void viewAllBikes(const vector<Bicycle>& fleet);
 void rentBike(vector<Bicycle>& fleet);
