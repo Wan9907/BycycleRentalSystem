@@ -142,8 +142,6 @@ void loadFromFile(vector<Member>& members, const string& filename) {
 }
 
 void memberMenu(vector<Member>& members) {
-    loadFromFile(members);
-
     int choice = 0;
     do {
         cout << "\n=========================================\n";

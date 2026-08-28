@@ -23,5 +23,5 @@ void searchMember(const std::vector<Member>& members, int targetID);
 void updateMember(std::vector<Member>& members, int targetID);
 void deleteMember(std::vector<Member>& members, int targetID);
 void memberMenu(std::vector<Member>& members);
-void saveToFile(const vector<Member>& members, const string& filename = "members.txt");
-void loadFromFile(vector<Member>& members, const string& filename = "members.txt");
+void saveToFile(const vector<Member>& members, const string& filename = "../data/members.txt");
+void loadFromFile(vector<Member>& members, const string& filename = "../data/members.txt");

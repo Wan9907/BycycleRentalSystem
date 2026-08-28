@@ -3,6 +3,7 @@
 
 #include "header/Bicycle.h"
 #include "header/member.h"
+#include "header/Schedule.h"
 using namespace std;
 
 int main() {
@@ -14,8 +15,11 @@ int main() {
 
     vector<Member> members;
     vector<Bicycle> fleet;
+    vector<Schedule> schedules;
+    vector<Rental> rentals;
 
     loadFleetFromFile(fleet);
+    loadFromFile(members);
 
     cout << "======================================" << endl;
     cout << "//                                  //" << endl;
@@ -65,11 +69,12 @@ int main() {
 
             case 2:
                 cout << "Bicycle Rental selected." << endl;
-                    bikeRentalMenu(fleet);
+                    bikeRentalMenu(fleet, rentals);
                 break;
 
             case 3:
                 cout << "Schedule Management selected." << endl;
+                    scheduleMenu(schedules);
                 break;
 
             case 4:

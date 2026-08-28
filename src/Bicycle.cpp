@@ -31,9 +31,7 @@ bool isValidCustomerId(const string& customerId) {
 }
 
 void saveFleetToFile(const vector<Bicycle>& fleet) {
-    filesystem::create_directories("data");
-
-    ofstream outFile("data/bikes.txt");
+    ofstream outFile("../data/bikes.txt");
     if (!outFile) {
         cerr << "Error: Could not save fleet state!" << endl;
         return;
@@ -51,7 +49,7 @@ void saveFleetToFile(const vector<Bicycle>& fleet) {
 }
 
 void loadFleetFromFile(vector<Bicycle>& fleet) {
-    ifstream inFile("data/bikes.txt");
+    ifstream inFile("../data/bikes.txt");
     if (!inFile) {
         // Default fleet on first launch — also write to disk so file exists next time
         fleet = {
@@ -112,45 +110,50 @@ void saveBookingToFile(int bikeId, const string& bikeType, int hours, double tot
     outFile.close();
 }
 
-// ─────────────────────────────────────────
-//  DISPLAY
-// ─────────────────────────────────────────
-
 // Log rental/return record to data/rental_records.txt
-void saveRentalRecord(const string& customerId,
-                      int bikeId,
-                      bool isReturn) {
-
-    filesystem::create_directories("data");
-
-    ofstream outFile("data/rental_records.txt", ios::app);
+void saveRentalRecord(const vector<Rental>& rentals) {
+    ofstream outFile("../data/rental_records.txt");
 
     if (!outFile) {
-        cerr << "Error: Could not save rental record!" << endl;
+        cerr << "Error: Could not save records state!" << endl;
         return;
     }
 
-    time_t now = time(0);
-    char timeBuffer[80];
-
-    struct tm timeInfo;
-
-#if defined(_WIN32) || defined(_WIN64)
-    localtime_s(&timeInfo, &now);
-#else
-    localtime_r(&now, &timeInfo);
-#endif
-
-    strftime(timeBuffer, sizeof(timeBuffer),
-             "%Y-%m-%d %H:%M:%S", &timeInfo);
-
-    outFile << customerId << "|"
-            << bikeId << "|"
-            << timeBuffer << "|"
-            << isReturn << "\n";
-
+    for (const auto& r : rentals) {
+        outFile << r.rentBy << "|" << r.bikeId << "|" << r.hours << "|" << r.isReturn << "|\n";
+    }
     outFile.close();
-}
+};
+
+void loadRentalRecord(vector<Rental>& rentals) {
+    ifstream inFile("../data/booking_records.txt");
+    if (!inFile) {
+        cerr << "Error: Could not load records state!" << endl;
+        return;
+    }
+
+    string line;
+    while (getline(inFile, line)) {
+        stringstream ss(line);
+        string rentBy, bikeIdStr, hourStr, isReturnStr;
+        getline(ss, rentBy, '|');
+        getline(ss, bikeIdStr, '|');
+        getline(ss, hourStr, '|');
+        getline(ss, isReturnStr, '|');
+
+        Rental rental;
+        rental.rentBy = rentBy;
+        rental.bikeId = stoi(bikeIdStr);
+        rental.hours = stoi(hourStr);
+        rental.isReturn = isReturnStr == "true";
+
+        rentals.push_back(rental);
+    }
+    inFile.close();
+};
+// ─────────────────────────────────────────
+//  DISPLAY
+// ─────────────────────────────────────────
 
 void displayAvailableBikes(const vector<Bicycle>& fleet) {
     cout << "\n--- Bicycle Fleet Status ---\n";
@@ -178,11 +181,12 @@ void viewAllBikes(const vector<Bicycle>& fleet) {
 }
 
 // Option 2 – rent a bike
-void rentBike(vector<Bicycle>& fleet) {
+void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
     displayAvailableBikes(fleet);
 
     string customerId;
     int bikeId, hours;
+    Rental rental;
 
     // Validate Customer ID format
     do {
@@ -195,9 +199,11 @@ void rentBike(vector<Bicycle>& fleet) {
         }
 
     } while (!isValidCustomerId(customerId));
+    rental.rentBy = customerId;
 
     cout << "Enter Bike ID to rent: ";
     cin >> bikeId;
+    rental.bikeId = bikeId;
 
     bool found = false;
 
@@ -211,6 +217,7 @@ void rentBike(vector<Bicycle>& fleet) {
             else {
                 cout << "Enter rental duration (hours): ";
                 cin >> hours;
+                rental.hours = hours;
 
                 double total = bike.hourlyRate * hours;
 
@@ -226,6 +233,9 @@ void rentBike(vector<Bicycle>& fleet) {
                      << fixed << setprecision(2)
                      << total << "\n";
 
+                rental.isReturn = false;
+                rentals.push_back(rental);
+
                 // Save booking information
                 saveBookingToFile(
                     bike.id,
@@ -236,11 +246,7 @@ void rentBike(vector<Bicycle>& fleet) {
 
                 // Save rental record
                 // false = not returned
-                saveRentalRecord(
-                    customerId,
-                    bike.id,
-                    false
-                );
+                saveRentalRecord(rentals);
 
                 // Save current bicycle status
                 saveFleetToFile(fleet);
@@ -256,7 +262,7 @@ void rentBike(vector<Bicycle>& fleet) {
 }
 
 // Option 3 – return a bike
-void returnBike(vector<Bicycle>& fleet) {
+void returnBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
     int bikeId;
 
     cout << "\nEnter Bike ID to return: ";
@@ -278,12 +284,13 @@ void returnBike(vector<Bicycle>& fleet) {
                 bike.isAvailable = true;
                 bike.rentedBy = "None";
 
+                for (auto& rental : rentals) {
+                    if (rental.bikeId == bikeId && rental.rentBy == customerId) {
+                        rental.isReturn = true;
+                    }
+                }
                 // Save return record
-                saveRentalRecord(
-                    customerId,
-                    bike.id,
-                    true
-                );
+                saveRentalRecord(rentals);
 
                 saveFleetToFile(fleet);
 
@@ -353,7 +360,7 @@ void removeBike(vector<Bicycle>& fleet) {
 //  MENU
 // ─────────────────────────────────────────
 
-void bikeRentalMenu(vector<Bicycle>& fleet) {
+void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals) {
     loadFleetFromFile(fleet);
 
     int choice;
@@ -378,8 +385,8 @@ void bikeRentalMenu(vector<Bicycle>& fleet) {
 
         switch (choice) {
             case 1: viewAllBikes(fleet);    break;
-            case 2: rentBike(fleet);        break;
-            case 3: returnBike(fleet);      break;
+            case 2: rentBike(fleet, rentals);        break;
+            case 3: returnBike(fleet, rentals);      break;
             case 4: addBike(fleet);         break;
             case 5: removeBike(fleet);      break;
             case 6:

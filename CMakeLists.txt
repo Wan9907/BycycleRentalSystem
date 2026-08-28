@@ -9,4 +9,6 @@ add_executable(BycycleRentalSystem
         header/member.h
         header/Bicycle.h
         src/Bicycle.cpp
+        header/Schedule.h
+        src/Schedule.cpp
 )
