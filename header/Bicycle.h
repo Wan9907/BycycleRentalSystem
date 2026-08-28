@@ -1,21 +1,24 @@
-#ifndef BICYCLE_H
-#define BICYCLE_H
-
+#pragma once
 #include <string>
 #include <vector>
+using namespace std;
 
 struct Bicycle {
-    int id;
-    std::string type;
+    int    id;
+    string type;
     double hourlyRate;
-    bool isAvailable;
-    std::string rentedBy; // Store user/member name or ID
+    bool   isAvailable;
+    string rentedBy;
 };
 
-void displayAvailableBikes(const std::vector<Bicycle>& fleet);
-void bikeRentalMenu(std::vector<Bicycle>& fleet);
-void saveBookingToFile(int bikeId, const std::string& bikeType, int hours, double totalCost, const std::string& userName);
-void saveFleetToFile(const std::vector<Bicycle>& fleet);
-void loadFleetFromFile(std::vector<Bicycle>& fleet);
+void saveFleetToFile(const vector<Bicycle>& fleet);
+void loadFleetFromFile(vector<Bicycle>& fleet);
+void saveBookingToFile(int bikeId, const string& bikeType, int hours, double totalCost);
 
-#endif
+void displayAvailableBikes(const vector<Bicycle>& fleet);
+void viewAllBikes(const vector<Bicycle>& fleet);
+void rentBike(vector<Bicycle>& fleet);
+void returnBike(vector<Bicycle>& fleet);
+void addBike(vector<Bicycle>& fleet);
+void removeBike(vector<Bicycle>& fleet);
+void bikeRentalMenu(vector<Bicycle>& fleet);
