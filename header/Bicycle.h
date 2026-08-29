@@ -1,32 +1,33 @@
 #pragma once
 #include <string>
 #include <vector>
-using namespace std;
+#include "Schedule.h"
 
 struct Bicycle {
     int    id;
-    string type;
+    std::string type;
     double hourlyRate;
     bool   isAvailable;
-    string rentedBy;
+    std::string rentedBy;
 };
 
 struct Rental {
-    string rentBy;
+    std::string rentBy;
     int bikeId;
+    DateYMD date;
     int hours;
     bool isReturn;
 };
 
-void saveFleetToFile(const vector<Bicycle>& fleet);
-void loadFleetFromFile(vector<Bicycle>& fleet);
-void saveBookingToFile(int bikeId, const string& bikeType, int hours, double totalCost);
-void saveRentalRecord(const vector<Rental>& rentals);
-void loadRentalRecord(vector<Rental>& rentals);
-void displayAvailableBikes(const vector<Bicycle>& fleet);
-void viewAllBikes(const vector<Bicycle>& fleet);
-void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals);
-void returnBike(vector<Bicycle>& fleet, vector<Rental>& rentals);
-void addBike(vector<Bicycle>& fleet);
-void removeBike(vector<Bicycle>& fleet);
-void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals);
+void saveFleetToFile(const std::vector<Bicycle>& fleet);
+void loadFleetFromFile(std::vector<Bicycle>& fleet);
+void saveBookingToFile(int bikeId, const std::string& bikeType, int hours, double totalCost);
+void saveRentalRecord(const std::vector<Rental>& rentals);
+void loadRentalRecord(std::vector<Rental>& rentals);
+void displayAvailableBikes(const std::vector<Bicycle>& fleet);
+void viewAllBikes(const std::vector<Bicycle>& fleet);
+void rentBike(std::vector<Bicycle>& fleet, std::vector<Rental>& rentals, std::vector<Schedule>& schedules);
+void returnBike(std::vector<Bicycle>& fleet, std::vector<Rental>& rentals);
+void addBike(std::vector<Bicycle>& fleet);
+void removeBike(std::vector<Bicycle>& fleet);
+void bikeRentalMenu(std::vector<Bicycle>& fleet, std::vector<Rental>& rentals, std::vector<Schedule>& schedules);

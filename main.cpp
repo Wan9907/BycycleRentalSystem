@@ -20,6 +20,7 @@ int main() {
 
     loadFleetFromFile(fleet);
     loadFromFile(members);
+    loadSchedule(schedules);
 
     cout << "======================================" << endl;
     cout << "//                                  //" << endl;
@@ -69,12 +70,12 @@ int main() {
 
             case 2:
                 cout << "Bicycle Rental selected." << endl;
-                    bikeRentalMenu(fleet, rentals);
+                    bikeRentalMenu(fleet, rentals, schedules);
                 break;
 
             case 3:
                 cout << "Schedule Management selected." << endl;
-                    scheduleMenu(schedules);
+                    scheduleMenu(schedules, fleet, rentals);
                 break;
 
             case 4:
@@ -95,6 +96,8 @@ int main() {
         cout << "Too many failed attempts." << endl;
         cout << "Access denied. Program ended..." << endl;
     }
+
+    saveSchedule(schedules);
 
     return 0;
 }

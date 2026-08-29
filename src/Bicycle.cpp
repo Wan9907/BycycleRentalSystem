@@ -120,7 +120,7 @@ void saveRentalRecord(const vector<Rental>& rentals) {
     }
 
     for (const auto& r : rentals) {
-        outFile << r.rentBy << "|" << r.bikeId << "|" << r.hours << "|" << r.isReturn << "|\n";
+        outFile << r.rentBy << "|" << r.bikeId << "|" << r.date.year << "," << r.date.month << "," << r.date.day << "|" << r.hours << "|" << r.isReturn << "|\n";
     }
     outFile.close();
 };
@@ -135,9 +135,10 @@ void loadRentalRecord(vector<Rental>& rentals) {
     string line;
     while (getline(inFile, line)) {
         stringstream ss(line);
-        string rentBy, bikeIdStr, hourStr, isReturnStr;
+        string rentBy, bikeIdStr, date, hourStr, isReturnStr;
         getline(ss, rentBy, '|');
         getline(ss, bikeIdStr, '|');
+        getline(ss, date, '|');
         getline(ss, hourStr, '|');
         getline(ss, isReturnStr, '|');
 
@@ -146,6 +147,20 @@ void loadRentalRecord(vector<Rental>& rentals) {
         rental.bikeId = stoi(bikeIdStr);
         rental.hours = stoi(hourStr);
         rental.isReturn = isReturnStr == "true";
+
+        stringstream ss2(date);
+        string ts;
+        vector<int> temp_date;
+
+        while (getline(ss2, ts, ',')) {
+            if (!ts.empty()) {
+                temp_date.push_back(stoi(ts));
+            }
+        }
+
+        rental.date.year = temp_date[0];
+        rental.date.month = temp_date[1];
+        rental.date.day = temp_date[2];
 
         rentals.push_back(rental);
     }
@@ -181,7 +196,7 @@ void viewAllBikes(const vector<Bicycle>& fleet) {
 }
 
 // Option 2 – rent a bike
-void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
+void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>& schedules) {
     displayAvailableBikes(fleet);
 
     string customerId;
@@ -201,8 +216,8 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
     } while (!isValidCustomerId(customerId));
     rental.rentBy = customerId;
 
-    cout << "Enter Bike ID to rent: ";
-    cin >> bikeId;
+    printSchedule(schedules,fleet);
+    bikeId = changeTimeSlot(schedules, fleet);
     rental.bikeId = bikeId;
 
     bool found = false;
@@ -218,6 +233,8 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
                 cout << "Enter rental duration (hours): ";
                 cin >> hours;
                 rental.hours = hours;
+
+                rental.date = getToday();
 
                 double total = bike.hourlyRate * hours;
 
@@ -360,7 +377,7 @@ void removeBike(vector<Bicycle>& fleet) {
 //  MENU
 // ─────────────────────────────────────────
 
-void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals) {
+void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>& schedules) {
     loadFleetFromFile(fleet);
 
     int choice;
@@ -385,7 +402,7 @@ void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals) {
 
         switch (choice) {
             case 1: viewAllBikes(fleet);    break;
-            case 2: rentBike(fleet, rentals);        break;
+            case 2: rentBike(fleet, rentals, schedules);        break;
             case 3: returnBike(fleet, rentals);      break;
             case 4: addBike(fleet);         break;
             case 5: removeBike(fleet);      break;
