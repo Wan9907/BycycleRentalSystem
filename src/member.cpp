@@ -1,4 +1,5 @@
 #include "../header/member.h"
+#include "../header/utils.h"
 #include <limits>
 #include <fstream>
 #include <sstream>
@@ -144,6 +145,7 @@ void loadFromFile(vector<Member>& members, const string& filename) {
 void memberMenu(vector<Member>& members) {
     int choice = 0;
     do {
+        clearScreen();
         cout << "\n=========================================\n";
         cout << "        MEMBER MANAGEMENT SYSTEM         \n";
         cout << "=========================================\n";
@@ -158,20 +160,25 @@ void memberMenu(vector<Member>& members) {
 
         switch (choice) {
         case 1:
+            clearScreen();
             addMember(members);
             saveToFile(members);
             break;
         case 2:
+           clearScreen();
             displayMembers(members);
             break;
         case 3:
+            clearScreen();
             searchMember(members, getValidIntInput("Enter Member ID: "));
             break;
         case 4:
+            clearScreen();
             updateMember(members, getValidIntInput("Enter Member ID: "));
             saveToFile(members);
             break;
         case 5:
+            clearScreen();
             deleteMember(members, getValidIntInput("Enter Member ID: "));
             saveToFile(members);
             break;

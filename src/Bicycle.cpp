@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <cctype>
 #include "../header/Bicycle.h"
+#include "../header/utils.h"
 
 using namespace std;
 
@@ -382,6 +383,7 @@ void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Sche
 
     int choice;
     do {
+        clearScreen();
         cout << "\n=========================================\n";
         cout << "      BICYCLE RENTAL MANAGEMENT          \n";
         cout << "=========================================\n";
@@ -401,11 +403,26 @@ void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Sche
         }
 
         switch (choice) {
-            case 1: viewAllBikes(fleet);    break;
-            case 2: rentBike(fleet, rentals, schedules);        break;
-            case 3: returnBike(fleet, rentals);      break;
-            case 4: addBike(fleet);         break;
-            case 5: removeBike(fleet);      break;
+            case 1:
+                clearScreen();
+                viewAllBikes(fleet);
+                break;
+            case 2:
+                clearScreen();
+                rentBike(fleet, rentals, schedules);
+                break;
+            case 3:
+                clearScreen();
+                returnBike(fleet, rentals);
+                break;
+            case 4:
+                clearScreen();
+                addBike(fleet);
+                break;
+            case 5:
+                clearScreen();
+                removeBike(fleet);
+                break;
             case 6:
                 saveFleetToFile(fleet);
                 cout << "\nReturning to Main Menu...\n";

@@ -1,5 +1,6 @@
 #include "../header/Schedule.h"
 #include "../header/Bicycle.h"
+#include "../header/utils.h"
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -15,6 +16,7 @@ using namespace std;
 void scheduleMenu(vector<Schedule>& schedules, vector<Bicycle>& bikes, vector<Rental>& rentals) {
     int choice;
     do {
+        clearScreen();
         cout << "\n=========================================" << endl;
         cout << "        MEMBER MANAGEMENT SYSTEM         " << endl;
         cout << "=========================================" << endl;
@@ -30,20 +32,25 @@ void scheduleMenu(vector<Schedule>& schedules, vector<Bicycle>& bikes, vector<Re
 
         switch (choice) {
             case 1:
+                clearScreen();
                 printSchedule(schedules, bikes);
                 break;
             case 2:
+                clearScreen();
                 printSchedule(schedules, bikes);
                 changeTimeSlot(schedules, bikes);
                 break;
             case 3:
+                clearScreen();
                 printSchedule(schedules, bikes);
                 deleteSchedule(schedules, bikes);
                 break;
             case 4:
+                clearScreen();
                 resetSchedule(schedules, rentals);
                 break;
             case 5:
+                clearScreen();
                 addScSchedule(schedules, bikes);
                 break;
             case 0:

@@ -11,4 +11,6 @@ add_executable(BycycleRentalSystem
         src/Bicycle.cpp
         header/Schedule.h
         src/Schedule.cpp
+        header/utils.h
+        src/utils.cpp
 )

@@ -4,6 +4,7 @@
 #include "header/Bicycle.h"
 #include "header/member.h"
 #include "header/Schedule.h"
+#include "header/utils.h"
 using namespace std;
 
 int main() {
@@ -22,6 +23,7 @@ int main() {
     loadFromFile(members);
     loadSchedule(schedules);
 
+    clearScreen();
     cout << "======================================" << endl;
     cout << "//                                  //" << endl;
     cout << "//       Bicycle Rental System      //" << endl;
@@ -45,6 +47,7 @@ int main() {
 
     if (loginSuccessful) {
         do {
+            clearScreen();
             cout << endl;
             cout << "========== MENU ==========" << endl;
             cout << "1. Customer Management" << endl;
