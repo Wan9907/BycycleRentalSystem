@@ -1,0 +1,34 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: cl.exe build Bicycle Rental System",
+            "command": "cl.exe",
+            "args": [
+                "/Zi",
+                "/EHsc",
+                "/std:c++17",
+                "/nologo",
+                "/Fe${workspaceFolder}\\main.exe",
+                "${workspaceFolder}\\main.cpp",
+                "${workspaceFolder}\\Bicycle.cpp",
+                "${workspaceFolder}\\member.cpp",
+                "${workspaceFolder}\\Billing.cpp",
+                "${fileDirname}\\Schedule.cpp",
+                "${fileDirname}\\utils.cpp"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build Bicycle Rental System"
+        }
+    ],
+    "version": "2.0.0"
+}
