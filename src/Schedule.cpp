@@ -107,11 +107,12 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
         chs2 = false;
 
         do {
-            found = false;
             isbooked = false;
 
             //check valid bike id
             do {
+                found = false;
+
                 cout << "\nEnter bike ID: ";
 
                 //check valid input
@@ -131,6 +132,8 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
 
             //check valid time slot
             do {
+                found = false;
+
                 cout << "Enter time slot(1-12): ";
                 if (!(cin >> timeSlot)) {
                     cout << "Invalid input! Please enter a number." << endl;
@@ -141,9 +144,11 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
 
                 if (timeSlot < 0 || timeSlot > 12) {
                     cout << "Invalid timeSlot! Please enter again." << endl;
+                }else {
+                    found = true;
                 }
 
-            }while (timeSlot < 0 || timeSlot > 12);
+            }while (!found);
 
             if (checkTimeSlot(schedules, id, timeSlot)) {
                 for (auto& schedule : schedules) {
@@ -185,6 +190,7 @@ void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bik
     bool found = false;
 
     do {
+        found = false;
         cout << "\nEnter bike ID: ";
 
         if (!(cin >> id)) {
@@ -202,6 +208,7 @@ void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bik
     }while (!found);
 
     do {
+        found = false;
         cout << "Enter time slot(1-12): ";
 
         if (!(cin >> timeSlot)) {
@@ -211,10 +218,9 @@ void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bik
             continue;
         }
 
-        if (timeSlot < 0 || timeSlot > 13) {
-            cout << "Invalid choice! Please enter again." << endl;
-        }
-    }while (timeSlot < 0 || timeSlot > 12);
+        if (timeSlot < 0 || timeSlot > 13) {cout << "Invalid timeSlot! Please enter again." << endl;}
+        else{found = true;}
+    }while (!found);
 
     if (!checkTimeSlot(schedules, id, timeSlot)) {
         for (auto& schedule : schedules) {
@@ -225,7 +231,7 @@ void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bik
             }
         }
     }else {
-        cout << "Invalid choice! Please enter again." << endl;
+        cout << "Time slot is no booked! Please enter again." << endl;
     }
 
 };
