@@ -43,7 +43,7 @@ void scheduleMenu(vector<Schedule>& schedules, vector<Bicycle>& bikes, vector<Re
             case 3:
                 clearScreen();
                 printSchedule(schedules, bikes);
-                deleteSchedule(schedules, bikes);
+                deleteTimeSlot(schedules, bikes);
                 break;
             case 4:
                 clearScreen();
@@ -66,8 +66,8 @@ void printSchedule(const vector<Schedule>& schedules, const vector<Bicycle>& bik
     cout << "                                          --Schedule--" << endl;
     cout << "             (1)     (2)     (3)     (4)     (5)     (6)     (7)     (8)     (9)     (10)    (11)    (12)  " << endl;
     cout << "-----------------------------------------------------------------------------------------------------------" << endl;
-    cout << "| Bike ID | 9.pm- | 10.am-| 11.am-| 12.pm-| 1.pm- | 2.pm- | 3.pm- | 4.pm- | 5.pm- | 6.pm- | 7.pm- | 8.pm- |" << endl;
-    cout << "|         | 10.pm | 11.am | 12.pm | 1.pm  | 2.pm  | 3.pm  | 4.pm  | 5.pm  | 6.pm  | 7.pm  | 8.pm  | 9.pm  |" << endl;
+    cout << "| Bike ID | 9.am- | 10.am-| 11.am-| 12.pm-| 1.pm- | 2.pm- | 3.pm- | 4.pm- | 5.pm- | 6.pm- | 7.pm- | 8.pm- |" << endl;
+    cout << "|         | 10.am | 11.am | 12.pm | 1.pm  | 2.pm  | 3.pm  | 4.pm  | 5.pm  | 6.pm  | 7.pm  | 8.pm  | 9.pm  |" << endl;
     cout << "-----------------------------------------------------------------------------------------------------------" << endl;
 
         for (const auto&[bike_id, time_slot_status] : schedules) {
@@ -185,7 +185,7 @@ bool checkTimeSlot(const std::vector<Schedule>& schedules, int targetID, int tim
 };
 
 //delete booked time slot
-void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bikes) {
+void deleteTimeSlot(std::vector<Schedule>& schedules, const vector<Bicycle>& bikes) {
     int id,timeSlot;
     bool found = false;
 

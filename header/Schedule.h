@@ -20,7 +20,7 @@ void printSchedule(const std::vector<Schedule>& schedules, const std::vector<Bic
 DateYMD getToday();
 int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes, int bike_id = -1);
 bool checkTimeSlot(const std::vector<Schedule>& schedules, int targetID, int time_slot);
-void deleteSchedule(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes);
+void deleteTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes);
 void resetSchedule(std::vector<Schedule>& schedules, const std::vector<Rental>& rentals);
 void addSchedule(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes);
 bool isToday(const DateYMD& date);
