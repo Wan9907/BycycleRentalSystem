@@ -428,7 +428,7 @@ void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Sche
                 cout << "\nReturning to Main Menu...\n";
                 break;
             default:
-                cout << "Invalid selection!\n";
+                cout << "Invali selection!\n";
         }
     } while (choice != 6);
 }
