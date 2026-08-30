@@ -87,13 +87,12 @@ void printSchedule(const vector<Schedule>& schedules, const vector<Bicycle>& bik
 DateYMD getToday() {
     DateYMD today{};
 
-    auto now = chrono::system_clock::now();
-    time_t now_time_t = std::chrono::system_clock::to_time_t(now);
-    tm* local_tm = std::localtime(&now_time_t);
+    time_t t = time(nullptr);
+    tm* now = localtime(&t);
 
-    today.year = local_tm->tm_year + 1900;
-    today.month = local_tm->tm_mon + 1;
-    today.day = local_tm->tm_mday;
+    today.year = now->tm_year + 1900;
+    today.month = now->tm_mon + 1;
+    today.day = now->tm_mday;
 
     return today;
 };
