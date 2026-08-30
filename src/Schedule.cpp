@@ -237,9 +237,8 @@ void deleteTimeSlot(std::vector<Schedule>& schedules, const vector<Bicycle>& bik
 
 //reset schedule to emtpy
 void resetSchedule(vector<Schedule>& schedules, const vector<Rental>& rentals) {
-    DateYMD today = getToday();
-    bool found = false;
-    char choice;
+    bool found = false, validInput = false;
+    string choice;
 
     for (const auto& rental : rentals) {
         if (isToday(rental.date)) {
@@ -248,29 +247,52 @@ void resetSchedule(vector<Schedule>& schedules, const vector<Rental>& rentals) {
     }
 
     if (!found) {
-        cout << "Are you sure want to reset the schedules?(y/n): ";
-        cin >> choice;
-
-        if (choice == 'y') {
-            for (auto& schedule : schedules) {
-                for (int i = 0;i < 12;i++) {
-                    schedule.time_slot_status[i] = ' ';
-                }
+        do {
+            validInput = false;
+            cout << "Are you sure want to reset the schedules?(y/n): ";
+            if (!(cin >> choice)) {
+                cout << "Invalid input! Please enter a number." << endl;
+                cin.clear();
+                cin.ignore(1000, '\n');
+                continue;
             }
-            cout << "Reset schedule success." << endl;
-        }
+
+            if (choice == "y" || choice == "Y") {
+                for (auto& schedule : schedules) {
+                    for (int i = 0;i < 12;i++) {
+                        schedule.time_slot_status[i] = ' ';
+                    }
+                }
+                cout << "Reset schedule success." << endl;
+
+                validInput = true;
+            }
+            else if (choice == "n" || choice == "N") {validInput = true;}
+            else {cout << "Invalid choice! Please enter again." << endl;}
+        }while (!validInput);
     }else {
-        cout << "Today's record are exist, are you sure want to reset the schedules?(y/n): ";
-        cin >> choice;
-
-        if (choice == 'y') {
-            for (auto& schedule : schedules) {
-                for (int i = 0;i < 12;i++) {
-                    schedule.time_slot_status[i] = ' ';
-                }
+        do {
+            validInput = false;
+            cout << "Today's record are exist, are you sure want to reset the schedules?(y/n): ";
+            if (!(cin >> choice)) {
+                cout << "Invalid input! Please enter a number." << endl;
+                cin.clear();
+                cin.ignore(1000, '\n');
+                continue;
             }
-            cout << "Reset schedule success." << endl;
-        }
+
+            if (choice == "y" || choice == "Y") {
+                for (auto& schedule : schedules) {
+                    for (int i = 0;i < 12;i++) {
+                        schedule.time_slot_status[i] = ' ';
+                    }
+                }
+                cout << "Reset schedule success." << endl;
+                validInput = true;
+            }
+            else if (choice == "n" || choice == "N") {validInput = true;}
+            else {cout << "Invalid choice! Please enter again." << endl;}
+        }while (!validInput);
     }
 };
 
