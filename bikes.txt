@@ -1,4 +1,4 @@
 101|City Bike|5|0|C1002
 102|Mountain Bike|8.5|0|C1002
-103|Electric Bike|15|1|None
+103|Electric Bike|15|0|C1002
 104|Tandem Bike|12|1|None

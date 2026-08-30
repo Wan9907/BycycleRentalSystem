@@ -309,7 +309,7 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>&
                 saveFleetToFile(fleet);
             }
 
-            break;
+          
         }
     
 
