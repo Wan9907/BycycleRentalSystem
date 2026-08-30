@@ -1,6 +1,4 @@
 #pragma once
-
-#include <string>
 #include <vector>
 
 struct Schedule {
@@ -24,7 +22,7 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
 bool checkTimeSlot(const std::vector<Schedule>& schedules, int targetID, int time_slot);
 void deleteSchedule(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes);
 void resetSchedule(std::vector<Schedule>& schedules, const std::vector<Rental>& rentals);
-void addScSchedule(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes);
+void addSchedule(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes);
 bool isToday(const DateYMD& date);
 void saveSchedule(const std::vector<Schedule>& schedules);
 void loadSchedule(std::vector<Schedule>& schedules);

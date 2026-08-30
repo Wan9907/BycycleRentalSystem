@@ -51,7 +51,7 @@ void scheduleMenu(vector<Schedule>& schedules, vector<Bicycle>& bikes, vector<Re
                 break;
             case 5:
                 clearScreen();
-                addScSchedule(schedules, bikes);
+                addSchedule(schedules, bikes);
                 break;
             case 0:
                 cout << "\nReturning to Main Menu...\n";
@@ -98,6 +98,7 @@ DateYMD getToday() {
     return today;
 };
 
+//book time slot
 int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>& bikes, int bike_id) {
     int id,timeSlot;
     bool found = false, isbooked = false, chs2 = false;
@@ -109,9 +110,11 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
             found = false;
             isbooked = false;
 
+            //check valid bike id
             do {
                 cout << "\nEnter bike ID: ";
 
+                //check valid input
                 if (!(cin >> id)) {
                     cout << "Invalid input! Please enter a number." << endl;
                     cin.clear();
@@ -126,6 +129,7 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
                 if (!found) {cout << "Invalid ID! Please enter again." << endl;}
             }while (!found);
 
+            //check valid time slot
             do {
                 cout << "Enter time slot(1-12): ";
                 if (!(cin >> timeSlot)) {
@@ -162,6 +166,7 @@ int changeTimeSlot(std::vector<Schedule>& schedules, const std::vector<Bicycle>&
     return id;
 };
 
+//check valid time slot
 bool checkTimeSlot(const std::vector<Schedule>& schedules, int targetID, int time_slot) {
     for (const auto& schedule : schedules) {
         if (schedule.bike_id == targetID) {
@@ -174,6 +179,7 @@ bool checkTimeSlot(const std::vector<Schedule>& schedules, int targetID, int tim
     return true;
 };
 
+//delete booked time slot
 void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bikes) {
     int id,timeSlot;
     bool found = false;
@@ -224,6 +230,7 @@ void deleteSchedule(std::vector<Schedule>& schedules, const vector<Bicycle>& bik
 
 };
 
+//reset schedule to emtpy
 void resetSchedule(vector<Schedule>& schedules, const vector<Rental>& rentals) {
     DateYMD today = getToday();
     bool found = false;
@@ -262,7 +269,8 @@ void resetSchedule(vector<Schedule>& schedules, const vector<Rental>& rentals) {
     }
 };
 
-void addScSchedule(vector<Schedule>& schedules, const vector<Bicycle>& bikes) {
+//add new bike schedule
+void addSchedule(vector<Schedule>& schedules, const vector<Bicycle>& bikes) {
     bool found = false;
     int count = 0;
 
@@ -288,6 +296,7 @@ void addScSchedule(vector<Schedule>& schedules, const vector<Bicycle>& bikes) {
     }
 };
 
+//check the date is today
 bool isToday(const DateYMD& date) {
     auto [year, month, day] = getToday();
     bool found = false;
