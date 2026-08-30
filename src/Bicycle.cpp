@@ -12,7 +12,7 @@ using namespace std;
 
 bool isValidCustomerId(const string& customerId) {
     // Must be exactly 4 characters
-    if (customerId.length() != 4) {
+    if (customerId.length() != 5) {
         return false;
     }
 
@@ -22,7 +22,7 @@ bool isValidCustomerId(const string& customerId) {
     }
 
     // Remaining 3 characters must be digits
-    for (int i = 1; i < 4; i++) {
+    for (int i = 1; i < 5; i++) {
         if (!isdigit(customerId[i])) {
             return false;
         }
@@ -197,7 +197,7 @@ void viewAllBikes(const vector<Bicycle>& fleet) {
 }
 
 // Option 2 – rent a bike
-void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>& schedules) {
+void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>& schedules,vector<Billing>& bills,const vector<Member>& members) {
     displayAvailableBikes(fleet);
 
     string customerId;
@@ -206,15 +206,32 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>&
 
     // Validate Customer ID format
     do {
-        cout << "\nEnter Customer ID (e.g. C100): ";
+        cout << "\nEnter Customer ID (e.g. C1001): ";
         cin >> customerId;
 
         if (!isValidCustomerId(customerId)) {
             cout << "Invalid Customer ID format!\n";
-            cout << "Please use format C100, C101, C102...\n";
+            cout << "Please use format C1001, C1002, C1003...\n";
         }
 
     } while (!isValidCustomerId(customerId));
+
+    bool customerFound = false;
+    int memberID = stoi(customerId.substr(1));
+
+
+    for (const auto& member : members) { 
+        if (member.memberID == memberID) {
+             customerFound = true; 
+             break; 
+            } 
+    }
+
+        if (!customerFound) { 
+            cout << "Customer ID not found!\n"; 
+            cout << "Please register as a customer first.\n"; 
+            return; 
+        } 
     rental.rentBy = customerId;
 
     printSchedule(schedules,fleet);
@@ -229,19 +246,32 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>&
 
             if (!bike.isAvailable) {
                 cout << "Sorry, this bike is currently rented out.\n";
+                break;
             }
-            else {
-                cout << "Enter rental duration (hours): ";
-                cin >> hours;
-                rental.hours = hours;
+            
+            cout << "Enter rental duration (hours): ";
+            cin >> hours;
+            rental.hours = hours;
 
-                rental.date = getToday();
+            rental.date = getToday();
 
-                double total = bike.hourlyRate * hours;
+            double total = bike.hourlyRate * hours;
 
                 // Store current customer renting this bike
-                bike.isAvailable = false;
-                bike.rentedBy = customerId;
+            bike.isAvailable = false;
+            bike.rentedBy = customerId;
+
+            Billing bill = createBilling( 
+                stoi(customerId.substr(1)),
+                bike.id, 
+                bike.type, 
+                bike.hourlyRate, 
+                hours );
+
+                bills.push_back(bill);
+
+                rental.isReturn = false; 
+                rentals.push_back(rental);
 
                 cout << "\nRental Confirmed!\n";
                 cout << "Customer ID : " << customerId << "\n";
@@ -251,8 +281,16 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>&
                      << fixed << setprecision(2)
                      << total << "\n";
 
-                rental.isReturn = false;
-                rentals.push_back(rental);
+                char paychoice;
+                cout << "\nDo you want to make payment now? (Y/N): "; 
+                cin >> paychoice; 
+                if (paychoice == 'Y' || paychoice == 'y') { 
+                    processPayment(bills.back()); 
+                    generateReceipt(bills.back()); 
+                } else { 
+                    cout << "Payment pending.\n"; 
+                    cout << "Please make payment before returning the bicycle.\n"; 
+                }
 
                 // Save booking information
                 saveBookingToFile(
@@ -272,7 +310,7 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>&
 
             break;
         }
-    }
+    
 
     if (!found) {
         cout << "Invalid Bike ID!\n";
@@ -280,7 +318,7 @@ void rentBike(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>&
 }
 
 // Option 3 – return a bike
-void returnBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
+void returnBike(vector<Bicycle>& fleet, vector<Rental>& rentals,vector<Billing>& bills) {
     int bikeId;
 
     cout << "\nEnter Bike ID to return: ";
@@ -294,37 +332,82 @@ void returnBike(vector<Bicycle>& fleet, vector<Rental>& rentals) {
 
             if (bike.isAvailable) {
                 cout << "This bike was not rented out.\n";
+                break;
             }
-            else {
+            
                 // Get the customer ID before clearing rentedBy
-                string customerId = bike.rentedBy;
+            string customerId = bike.rentedBy;
 
-                bike.isAvailable = true;
-                bike.rentedBy = "None";
+            int memberID = stoi(customerId.substr(1));
+            bool paidRecordFound = false;
+            bool unpaidRecordFound = false;
 
-                for (auto& rental : rentals) {
-                    if (rental.bikeId == bikeId && rental.rentBy == customerId) {
-                        rental.isReturn = true;
+            for (auto& bill : bills) {
+
+                if (bill.bikeID == bikeId &&
+                    bill.memberID == memberID) {
+
+                    if (!bill.paid) {
+                        unpaidRecordFound = true;
                     }
+                    else {
+                        paidRecordFound = true;
+                    }
+
+                    break;
                 }
-                // Save return record
-                saveRentalRecord(rentals);
+            }           
 
-                saveFleetToFile(fleet);
-
-                cout << "Bike ID "
-                     << bikeId
-                     << " successfully returned!\n";
+            if (unpaidRecordFound) {
+                cout << "\nReturn rejected!\n";
+                cout << "Payment has not been completed.\n";
+                cout << "Please complete payment before returning the bicycle.\n";
+                 break;
             }
 
+            if (!paidRecordFound) {
+                cout << "Billing record not found.\n";
+                cout << "Return cannot be completed.\n";
+                break;
+            }
+
+
+            for (auto& rental : rentals) {
+
+                if (rental.bikeId == bikeId &&
+                    rental.rentBy == customerId &&
+                    !rental.isReturn) {
+
+                    rental.isReturn = true;
+                    break;
+                }
+            }
+
+
+            bike.isAvailable = true;
+            bike.rentedBy = "None";
+
+                
+
+            // Save return record
+            saveRentalRecord(rentals);
+
+            saveFleetToFile(fleet);
+
+            cout << "\n====================================\n";
+            cout << "Bike returned successfully!\n";
+            cout << "Bike ID      : " << bikeId << "\n";
+            cout << "Customer ID  : " << customerId << "\n";
+            cout << "====================================\n";
             break;
+        
         }
     }
-
     if (!found) {
         cout << "Invalid Bike ID!\n";
     }
 }
+
 
 // Option 4 – add a new bike
 void addBike(vector<Bicycle>& fleet) {
@@ -346,6 +429,7 @@ void addBike(vector<Bicycle>& fleet) {
     cin  >> newBike.hourlyRate;
 
     newBike.isAvailable = true;
+    newBike.rentedBy = "None";
 
     fleet.push_back(newBike);
     saveFleetToFile(fleet);
@@ -378,7 +462,7 @@ void removeBike(vector<Bicycle>& fleet) {
 //  MENU
 // ─────────────────────────────────────────
 
-void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>& schedules) {
+void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Schedule>& schedules,vector<Billing>& bills,const vector<Member>& members) {
     loadFleetFromFile(fleet);
 
     int choice;
@@ -409,11 +493,11 @@ void bikeRentalMenu(vector<Bicycle>& fleet, vector<Rental>& rentals, vector<Sche
                 break;
             case 2:
                 clearScreen();
-                rentBike(fleet, rentals, schedules);
+                rentBike(fleet, rentals, schedules,bills,members);
                 break;
             case 3:
                 clearScreen();
-                returnBike(fleet, rentals);
+                returnBike(fleet, rentals,bills);
                 break;
             case 4:
                 clearScreen();
