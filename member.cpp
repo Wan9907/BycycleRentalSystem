@@ -40,7 +40,7 @@ void addMember(vector<Member>& members) {
     } while (true);
 
     members.push_back(newMember);
-    cout << "Member registered with ID: " << newMember.memberID << "\n";
+    cout << "Member registered with ID: C" << newMember.memberID << "\n";
 }
 
 //display member function
