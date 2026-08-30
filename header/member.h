@@ -25,3 +25,4 @@ void deleteMember(std::vector<Member>& members, int targetID);
 void memberMenu(std::vector<Member>& members);
 void saveToFile(const vector<Member>& members, const string& filename = "../data/members.txt");
 void loadFromFile(vector<Member>& members, const string& filename = "../data/members.txt");
+bool memberExists(const vector<Member>& members, int memberID);
